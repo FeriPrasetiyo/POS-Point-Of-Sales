@@ -290,11 +290,3 @@ body {
         display: none;
     }
 }
-
-.dropdown {
-    padding: 0px 10px 0px 0px;
-}
-
-.dropdown-item {
-    padding: 0px 1rem 0px 0px;
-}
