@@ -1,0 +1,148 @@
+body {
+  background-color: #4649FF;
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.container {
+  padding-top: 10rem;
+  background-color: #4649FF;
+}
+
+.imgrubi {
+  background-color: black;
+  border-radius: 1rem 0rem 0rem 1rem;
+}
+
+.fromlogin {
+  background-color: white;
+  border-radius: 0rem 1rem 1rem 0rem;
+}
+
+h1 {
+  padding-top: 2rem;
+}
+
+img {
+  padding-top: 10rem;
+  margin-bottom: 10rem;
+}
+
+.input-group {
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+.input {
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  font: inherit;
+  color: black;
+  background-color: transparent;
+  outline: 2px solid #000;
+  width: 100%;
+}
+
+.input-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(10px, 10px);
+  transition: transform .25s;
+}
+
+.input:focus+.input-label,
+.input:valid+.input-label {
+  transform: translate(10px, -14px) scale(.8);
+  color: white;
+  padding-inline: 5px;
+  background-color: #1E293B;
+  border-radius: 0.5rem;
+  padding: 4px 10px;
+  font-size: 1rem;
+}
+
+
+.input:is(:focus, :valid) {
+  outline-color: #1E293B;
+}
+
+
+btn btn-primary {
+  padding: 0rem 2rem 0rem 2rem;
+}
+
+
+
+/* CSS */
+.button-65 {
+  appearance: none;
+  backface-visibility: hidden;
+  background-color: #2f80ed;
+  border-radius: 20px;
+  border-style: none;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Inter, -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  height: 50px;
+  letter-spacing: normal;
+  line-height: 1.5;
+  outline: none;
+  overflow: hidden;
+  padding: 14px 180px 14px 180px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.button-65:hover {
+  background-color: #1366d6;
+  box-shadow: rgba(0, 0, 0, .05) 0 5px 30px, rgba(0, 0, 0, .05) 0 1px 4px;
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: .35s;
+}
+
+.button-65:hover:after {
+  opacity: .5;
+}
+
+.button-65:active {
+  box-shadow: rgba(0, 0, 0, .1) 0 3px 6px 0, rgba(0, 0, 0, .1) 0 0 10px 0, rgba(0, 0, 0, .1) 0 1px 4px -1px;
+  transform: translateY(2px);
+  transition-duration: .35s;
+}
+
+.button-65:active:after {
+  opacity: 1;
+}
+
+
+#_checkbox:checked+label {
+  background-color: #07d410;
+  box-shadow: 0 7px 10px #92ff97;
+}
+
+#_checkbox:checked+label:before {
+  width: 0;
+  height: 0;
+}
+
+#_checkbox:checked+label #tick_mark:before,
+#_checkbox:checked+label #tick_mark:after {
+  transform: translate(0);
+  opacity: 1;
+}
