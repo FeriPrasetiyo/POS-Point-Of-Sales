@@ -15,42 +15,42 @@ module.exports = function (db) {
   });
 
   router.get('/dashboard', isLoggedIn, function (req, res, next) {
-    res.render('dashboard', { user: req.session.user, current: 'dashboard' });
+    res.render('dashboard/dashboard', { user: req.session.user, current: 'dashboard' });
   });
 
   router.get('/suppliers', isLoggedIn, function (req, res, next) {
-    res.render('suppliers', { user: req.session.user, current: 'suppliers' });
+    res.render('suppliers/suppliers', { user: req.session.user, current: 'suppliers' });
   });
 
   router.get('/costomers', isLoggedIn, function (req, res, next) {
-    res.render('costomers', { user: req.session.user, current: 'costomers' });
+    res.render('costomers/costomers', { user: req.session.user, current: 'costomers' });
   });
 
   router.get('/users', isLoggedIn, function (req, res, next) {
     db.query('SELECT * FROM users', (err, data) => {
       if (err) return res.send(err)
-      res.render('users', { user: req.session.user, current: 'users', users: data.rows });
+      res.render('users/users', { user: req.session.user, current: 'users', users: data.rows });
     })
   });
 
   router.get('/purchases', isLoggedIn, function (req, res, next) {
-    res.render('purchases', { user: req.session.user, current: 'purchases' });
+    res.render('purchases/purchases', { user: req.session.user, current: 'purchases' });
   });
 
   router.get('/sales', isLoggedIn, function (req, res, next) {
-    res.render('sales', { user: req.session.user, current: 'sales' });
+    res.render('Sales/sales', { user: req.session.user, current: 'sales' });
   });
 
   router.get('/users/edit/:userid', isLoggedIn, function (req, res, next) {
     db.query('SELECT * FROM users WHERE userid = $1', [Number(req.params.userid)], (err, data) => {
       if (err) return res.send(err)
       if (data.rows.length == 0) return res.send('data not found')
-      res.render('edit', { user: req.session.user, current: 'edit', item: data.rows[0] });
+      res.render('users/edit', { user: req.session.user, current: 'edit', item: data.rows[0] });
     })
   });
 
   router.get('/users/add', isLoggedIn, function (req, res, next) {
-    res.render('add', {
+    res.render('users/add', {
       user: req.session.user, current: 'add', success: req.flash('success'),
       error: req.flash('error')
     });

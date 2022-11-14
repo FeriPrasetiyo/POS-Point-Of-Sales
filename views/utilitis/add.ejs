@@ -1,0 +1,70 @@
+<%- include ../partials/header %>
+    <!-- awal Navbar -->
+    <div class="container-fluid all-menu">
+        <form action="" method="post">
+            <div class="row">
+                <div class="col">
+                    <h1>units</h1>
+                    <div class="card text-start">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col">
+                                    <h6 class="text-primary">Form add</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3 row">
+                                <label for="staticunit" class="col-sm-2 col-form-label">Unit</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="unit" name="unit">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staticName" class="col-sm-2 col-form-label">Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="name" name="name">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="inputnote" class="col-sm-2 col-form-label">Note</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="note" name="note">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <div class="btn-group dropstart">
+                                <button type="submit" class="btn btn-success dropdown-toggle-split">
+                                    <span class="btn-logo"><i class="fa-solid fa-database"></i></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <!-- Dropdown menu links -->
+                                </ul>
+                                <button type="submit" class="btn btn-secondary"
+                                    style="background-color: rgb(59, 160, 59);">
+                                    <span>Save</span>
+                                </button>
+                            </div>
+                            <a href="/units" style="text-decoration: none;">
+                                <div class="btn-group dropstart">
+                                    <button type="button" class="btn btn-warning dropdown-toggle-split"
+                                        style="background-color: yellow;">
+                                        <span class="btn-logo"><i class="fa-solid fa-rotate-left"></i></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <!-- Dropdown menu links -->
+                                    </ul>
+                                    <button type="button" class="btn btn-warning">
+                                        <span>Reset</span>
+                                    </button>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <%- include ../partials/footer %>

@@ -1,4 +1,4 @@
-<%- include partials/header %>
+<%- include ../partials/header %>
     <!-- awal Navbar -->
     <div class="container-fluid all-menu">
         <div class="row">
@@ -38,7 +38,7 @@
                                         <% users.forEach((item, index)=>{ %>
                                             <tr>
                                                 <td>
-                                                    <%= index + 1 %>
+                                                    <%= item.userid %>
                                                 </td>
                                                 <td>
                                                     <%= item.email %>
@@ -61,31 +61,32 @@
                                                         <button type="button" class="btn btn-danger"
                                                             style="border-radius: 50%;"><i
                                                                 class="fa-solid fa-trash"></i></button>
-                                                    </a>
-                                                    <div class="modal fade" id="exampleModalDelete" tabindex="-1"
-                                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                                                        Yakin
-                                                                        Hapus</h1>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    anda akan Hapus
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <a type="a" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Tidak jadi</a>
-                                                                    <a type="a" class="btn btn-secondary"
-                                                                        href="/users/delete/<%= item.userid %>">Hapus</a>
+                                                        <div class="modal fade" id="exampleModalDelete" tabindex="-1"
+                                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h1 class="modal-title fs-5"
+                                                                            id="exampleModalLabel">
+                                                                            Yakin
+                                                                            Hapus</h1>
+                                                                        <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        anda akan Hapus
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <a type="a" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Tidak jadi</a>
+                                                                        <a type="a" class="btn btn-secondary"
+                                                                            href="/users/delete/<%= item.userid %>">Hapus</a>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </a>
                                                 </td>
                                             </tr>
                                             <% }) %>
@@ -107,4 +108,4 @@
 
 
     </script>
-    <%- include partials/footer %>
+    <%- include ../partials/footer %>
