@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 const { isLoggedIn } = require('../helpers/util')
 
 
@@ -30,24 +28,24 @@ module.exports = function (db) {
     }
   })
 
-  router.get('/edit/:unit_id', async (req, res) => {
+  router.get('/edit/:unit', async (req, res) => {
     try {
-      const { unit_id } = req.params
+      const { unit } = req.params
 
-      const { rows: data } = await db.query('SELECT * FROM units WHERE unit_id = $1', [unit_id])
+      const { rows: data } = await db.query('SELECT * FROM units WHERE unit = $1', [unit])
       res.render('utilitis/unitEdit', { item: data[0], user: req.session.user, current: 'units' })
     } catch (err) {
       res.send(err)
     }
   })
 
-  router.post('/edit/:unit_id', async (req, res) => {
+  router.post('/edit/:unit', async (req, res) => {
     try {
-      const { unit_id } = req.params
+      const { unit } = req.params
       console.log(req.params)
-      const { unit, name, note } = req.body
+      const { name, note } = req.body
       console.log(req.body)
-      await db.query('UPDATE units SET unit=$1, name=$2, note=$3 WHERE unit_id=$4', [unit, name, note, unit_id])
+      await db.query('UPDATE units SET name=$1, note=$2 WHERE unit=$3', [name, note, unit])
 
       res.redirect('/units')
     } catch (err) {

@@ -46,19 +46,20 @@
                                                     <%= item.note %>
                                                 </td>
                                                 <td>
-                                                    <a href="/units/edit/<%= item.unit_id %>"
+                                                    <a href="/units/edit/<%= item.unit %>"
                                                         style="text-decoration: none;">
                                                         <button type="button" class="btn btn-success"
                                                             style="border-radius: 50%;"><i
                                                                 class="fa-solid fa-circle-exclamation"></i></button>
                                                     </a>
                                                     <a type="dropdown-item" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModalDelete">
+                                                        data-bs-target="#exampleModalDelete<%= item.unit %>">
                                                         <button type="button" class="btn btn-danger"
                                                             style="border-radius: 50%;"><i
                                                                 class="fa-solid fa-trash"></i></button>
-                                                        <div class="modal fade" id="exampleModalDelete" tabindex="-1"
-                                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal fade" id="exampleModalDelete<%= item.unit %>"
+                                                            tabindex="-1" aria-labelledby="exampleModalLabel"
+                                                            aria-hidden="true">
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
@@ -77,7 +78,7 @@
                                                                         <a type="a" class="btn btn-secondary"
                                                                             data-bs-dismiss="modal">Tidak jadi</a>
                                                                         <a type="a" class="btn btn-secondary"
-                                                                            href="/units/delete/<%= item.unit_id %>">Hapus</a>
+                                                                            href="/units/delete/<%= item.unit %>">Hapus</a>
                                                                     </div>
                                                                 </div>
                                                             </div>

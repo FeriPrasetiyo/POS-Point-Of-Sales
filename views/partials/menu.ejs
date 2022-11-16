@@ -29,7 +29,8 @@
                             <span class="link_name">Goods Utilities</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-light">
-                            <li><a class="dropdown-item" href="#">Goods</a></li>
+                            <li><a class="dropdown-item <%= current == 'goods' ? 'active' : '' %>"
+                                    href="/goods">Goods</a></li>
                             <li><a class="dropdown-item <%= current == 'units' ? 'active' : '' %>"
                                     href="/units">Units</a></li>
                         </ul>
@@ -89,13 +90,13 @@
                     <!-- <img src="../public/images/default-users2.png" width="9%" alt=""> -->
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i>Profile</a></li>
-                <li><a class="dropdown-item" href="#"><i class="fa-sharp fa-solid fa-gears"></i>Settings</a>
+                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> Profile</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fa-sharp fa-solid fa-gears"></i> Settings</a>
                 </li>
-                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bars"></i>Activity Log</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bars"></i> Activity Log</a></li>
                 <hr>
                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"><i
-                            class="fa-solid fa-right-from-bracket"></i>Logout</a>
+                            class="fa-solid fa-right-from-bracket"></i> Logout</a>
                 </li>
             </ul>
         </div>
