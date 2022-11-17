@@ -1,6 +1,6 @@
 <%- include ../partials/header %>
     <div class="container-fluid all-menu">
-        <form action="" method="post">
+        <form action="" method="post" encType="multipart/form-data">
             <div class="row">
                 <div class="col">
                     <h1>Goods</h1>
@@ -45,23 +45,33 @@
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label for="staticunit" class="col-sm-2 col-form-label">Unit</label>
+                                <label for="inputunit" class="col-sm-2 col-form-label">Unit</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="unit" name="unit"
-                                        value="<%= item.unit %>">
+                                    <select class="form-select" aria-label="Default select example" name="unit">
+                                        <option value="<%= item.unit%>">
+                                            <%= item.unit%>
+                                        </option>
+                                        <% units.forEach((item, index)=>{%>
+                                            <option value="<%= item.unit%>">
+                                                <%= item.unit %>
+                                            </option>
+                                            <%})%>
+                                    </select>
                                 </div>
                             </div>
                             <div class="mb-3 row">
                                 <label for="inputpicture" class="col-sm-2 col-form-label">Picture</label>
                                 <div class="col-sm-10">
                                     <input class="form-control" type="file" onchange="loadFile(event)" class="btn-kirim"
-                                        name="sampleFile" accept="image/png, image/gif, image/jpeg">
+                                        name="sampleFile" accept="image/png, image/gif, image/jpeg"
+                                        value="<%= item.picture %>">
                                 </div>
                             </div>
                             <div class="mb-3 row">
                                 <label for="inputselling" class="col-sm-2 col-form-label">Preview</label>
                                 <div class="col-sm-10">
-                                    <img id="output" width="400" height="auto" src="<%= item.unit %>" />
+                                    <img id="output" width="400" height="auto"
+                                        src="/images/upload/<%= item.picture %>" />
                                 </div>
                             </div>
                         </div>
@@ -99,14 +109,11 @@
         </form>
     </div>
     <script>
-        const labelPreview = document.querySelector('.btn-kirim');
-
         const loadFile = function (event) {
             var reader = new FileReader();
             reader.onload = function () {
                 var output = document.getElementById('output');
                 output.src = reader.result;
-                labelPreview.classList.remove('d-none')
             };
             reader.readAsDataURL(event.target.files[0]);
         };

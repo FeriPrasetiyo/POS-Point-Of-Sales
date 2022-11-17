@@ -38,44 +38,54 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <% goods.forEach((item, index)=>{ %>
-                                            <tr>
-                                                <td>
-                                                    <%= item.barcode %>
-                                                </td>
-                                                <td>
-                                                    <%= item.name %>
-                                                </td>
-                                                <td>
-                                                    <%= item.stock %>
-                                                </td>
-                                                <td>
-                                                    <%= item.unit %>
-                                                </td>
-                                                <td>
-                                                    <%= item.purchaseprice %>
-                                                </td>
-                                                <td>
-                                                    <%= item.sellingprice %>
-                                                </td>
-                                                <td>
-                                                    <%= item.picture %>
-                                                </td>
-                                                <td>
-                                                    <a href="/goods/edit/<%= item.barcode %>"
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                "lengthMenu": [[3, 6, 20], [3, 6, 20]],
+                "processing": true,
+                "serverSide": true,
+                "ajax": "goods/datatable",
+                "columns": [
+                    { "data": "barcode" },
+                    { "data": "name" },
+                    { "data": "stock" },
+                    { "data": "purchaseprice" },
+                    { "data": "sellingprice" },
+                    { "data": "unit" },
+                    {
+                        "data": "picture",
+                        render: function (data, index) {
+                            return `
+                        <img src="/images/upload/${data}" alt="your preview " width="100">`
+                        }
+
+
+                    },
+                    {
+                        "data": "barcode",
+                        render: function (data, index) {
+                            return `
+                            <a href="/goods/edit/${data}"
                                                         style="text-decoration: none;">
                                                         <button type="button" class="btn btn-success"
                                                             style="border-radius: 50%;"><i
                                                                 class="fa-solid fa-circle-exclamation"></i></button>
                                                     </a>
                                                     <a type="dropdown-item" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModalDelete<%= item.barcode %>">
+                                                        data-bs-target="#exampleModalDelete${data}">
                                                         <button type="button" class="btn btn-danger"
                                                             style="border-radius: 50%;"><i
                                                                 class="fa-solid fa-trash"></i></button>
                                                         <div class="modal fade"
-                                                            id="exampleModalDelete<%= item.barcode %>" tabindex="-1"
+                                                            id="exampleModalDelete${data}" tabindex="-1"
                                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
@@ -95,31 +105,17 @@
                                                                         <a type="a" class="btn btn-secondary"
                                                                             data-bs-dismiss="modal">Tidak jadi</a>
                                                                         <a type="a" class="btn btn-secondary"
-                                                                            href="/units/delete/<%= item.barcode %>">Hapus</a>
+                                                                            href="/goods/delete/${data}">Hapus</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </a>
-                                                </td>
-                                            </tr>
-                                            <% }) %>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        $(document).ready(function () {
-            const table = $('#example').DataTable({
-                "lengthMenu": [[3, 6, 9, 12, -1], [3, 6, 9, 12, 'All']
+                            `
+                        }
+                    }
                 ]
             });
         });
-
     </script>
     <%- include ../partials/footer %>
