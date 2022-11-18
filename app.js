@@ -20,6 +20,7 @@ const pool = new Pool({
 var indexRouter = require('./routes/index')(pool);
 var utilitisRouter = require('./routes/utilitis')(pool);
 var goodsRouter = require('./routes/goods')(pool);
+var suppliersRouter = require('./routes/suppliers')(pool);
 
 var app = express();
 
@@ -43,6 +44,7 @@ app.use(fileUpload());
 app.use('/', indexRouter);
 app.use('/units', utilitisRouter);
 app.use('/goods', goodsRouter);
+app.use('/suppliers', suppliersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -18,10 +18,6 @@ module.exports = function (db) {
     res.render('dashboard/dashboard', { user: req.session.user, current: 'dashboard' });
   });
 
-  router.get('/suppliers', isLoggedIn, function (req, res, next) {
-    res.render('suppliers/suppliers', { user: req.session.user, current: 'suppliers' });
-  });
-
   router.get('/costomers', isLoggedIn, function (req, res, next) {
     res.render('costomers/costomers', { user: req.session.user, current: 'costomers' });
   });
