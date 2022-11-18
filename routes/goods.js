@@ -112,17 +112,19 @@ module.exports = function (db) {
         try {
             const { barcode } = req.params
 
+
+            const { rows: resut } = await db.query('SELECT * FROM goods WHERE barcode = $1', [barcode])
+            const removeImg = resut[0].picture
+            const removePath = path.join(__dirname, '..', 'public', 'images', 'upload', removeImg);
+            console.log(removePath)
+
+            fs.unlinkSync(removePath)
             const { rows } = await db.query('DELETE FROM goods WHERE barcode = $1', [barcode])
-
-            // const { rows: resut } = await db.query('SELECT * FROM goods')
-            // const removeImg = resut[0].picture
-
-            // fs.unlinkSync(`/public/images/upload/${removeImg}`, function (err) {
-            //     console.log(err)
-            // })
-
-
             res.redirect('/goods')
+
+
+
+
         } catch (err) {
             res.send(err)
         }
