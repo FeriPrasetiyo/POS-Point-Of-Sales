@@ -1,0 +1,112 @@
+<%- include ../partials/header %>
+    <!-- awal Navbar -->
+    <div class="container-fluid all-menu">
+        <div class="row">
+            <div class="col">
+                <h2>Units</h2>
+                <h6>this is data of units</h6>
+                <div class="card">
+                    <div class="card-header">
+                        <a href="/purchases/add" style="text-decoration: none;">
+                            <div class="btn-group dropstart">
+                                <button type="button" class="btn btn-primary dropdown-toggle-split"
+                                    style="background-color: rgb(5, 15, 151);">
+                                    <span class="btn-logo"><i class="fa-solid fa-plus"></i></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <!-- Dropdown menu links -->
+                                </ul>
+                                <button type="button" class="btn btn-primary">
+                                    <span>Save</span>
+                                </button>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <table id="example" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice</th>
+                                            <th>Time</th>
+                                            <th>Total Summary</th>
+                                            <th>Supplier</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <th>Invoice</th>
+                                        <th>Time</th>
+                                        <th>Total Summary</th>
+                                        <th>Supplier</th>
+                                        <th>Action</th>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                "lengthMenu": [[3, 6, 20], [3, 6, 20]],
+                "processing": true,
+                "serverSide": true,
+                "ajax": "purchases/datatable",
+                "columns": [
+                    { "data": "invoice" },
+                    { "data": "time" },
+                    { "data": "totalsum" },
+                    { "data": "supplier" },
+                    {
+                        "data": "unit",
+                        render: function (data, index) {
+                            return `
+                                        <a href="/purchases/edit/${data}" style="text-decoration: none;">
+                                                    <button type="button" class="btn btn-success"
+                                                        style="border-radius: 50%;"><i
+                                                            class="fa-solid fa-circle-exclamation"></i></button>
+                                                </a>
+                                                <a type="dropdown-item" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModalDelete${data}">
+                                                    <button type="button" class="btn btn-danger"
+                                                        style="border-radius: 50%;"><i
+                                                            class="fa-solid fa-trash"></i></button>
+                                                    <div class="modal fade" id="exampleModalDelete${data}"
+                                                        tabindex="-1" aria-labelledby="exampleModalLabel"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                                                        Yakin
+                                                                        Hapus</h1>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    anda akan Hapus
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <a type="a" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Tidak jadi</a>
+                                                                    <a type="a" class="btn btn-secondary"
+                                                                        href="/purchases/delete/${data}">Hapus</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                            `
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+    <%- include ../partials/footer %>

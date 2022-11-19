@@ -56,10 +56,6 @@ module.exports = function (db) {
     res.json(response)
   })
 
-  router.get('/purchases', isLoggedIn, function (req, res, next) {
-    res.render('purchases/purchases', { user: req.session.user, current: 'purchases' });
-  });
-
   router.get('/sales', isLoggedIn, function (req, res, next) {
     res.render('Sales/sales', { user: req.session.user, current: 'sales' });
   });
