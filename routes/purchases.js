@@ -1,6 +1,8 @@
+const { name } = require('ejs');
 var express = require('express');
 var router = express.Router();
 const { isLoggedIn } = require('../helpers/util')
+const moment = require("moment")
 
 
 /* GET home page. */
@@ -17,15 +19,7 @@ module.exports = function (db) {
     let params = []
 
     if (req.query.search.value) {
-      params.push(`name ilike '%${req.query.search.value}%'`)
-    }
-
-    if (req.query.search.value) {
-      params.push(`address ilike '%${req.query.search.value}%'`)
-    }
-
-    if (req.query.search.value) {
-      params.push(`phone ilike '%${req.query.search.value}%'`)
+      params.push(`invoice ilike '%${req.query.search.value}%'`)
     }
 
 
@@ -45,54 +39,64 @@ module.exports = function (db) {
     res.json(response)
   })
 
-  router.get('/add', isLoggedIn, function (req, res, next) {
-    res.render('purchases/purchases', { user: req.session.user, current: 'suppliers' });
-  })
-
-  router.post('/add', async (req, res) => {
+  router.get('/add', isLoggedIn, async (req, res, next) => {
     try {
-      const { name, address, phone } = req.body
-      const { rows: data } = await db.query('INSERT INTO suppliers (name, address, phone) VALUES ($1, $2, $3)', [name, address, phone])
-      res.redirect('/suppliers')
+      const { rows } = await db.query('INSERT INTO purchases(totalsum) VALUES(0) returning *')
+      res.redirect(`/purchases/show/${rows[0].invoice}`)
     } catch (err) {
       res.send(err)
     }
   })
 
-  router.get('/edit/:supplierid', async (req, res) => {
+  router.get('/show/:invoice', async (req, res) => {
+    console.log("masuk")
     try {
-      const { supplierid } = req.params
-
-      const { rows: data } = await db.query('SELECT * FROM suppliers WHERE supplierid = $1', [supplierid])
-      res.render('suppliers/suppliersedit', { item: data[0], user: req.session.user, current: 'units' })
+      const purchases = await db.query('SELECT * FROM purchases WHERE invoice = $1', [req.params.invoice])
+      const { rows: data } = await db.query('SELECT barcode, name FROM goods order by barcode')
+      console.log(data)
+      res.render('purchases/purchasesadd', {
+        moment,
+        purchases: purchases.rows[0],
+        barang: data,
+        user: req.session.user,
+        current: 'purchases'
+      })
     } catch (err) {
       res.send(err)
     }
   })
 
-  router.post('/edit/:supplierid', async (req, res) => {
+  router.post('/additem', async (req, res) => {
+    console.log("masuk")
     try {
-      const { supplierid } = req.params
-      const { name, address, phone } = req.body
-      await db.query('UPDATE suppliers SET name=$1, address=$2, phone=$3 WHERE supplierid = $4', [name, address, phone, supplierid])
-
-      res.redirect('/suppliers')
+      const { rows } = db.query('INSET INTO purchaseitems(invoice,itemcode,quantity) VALUES ($1 ,$2 ,$3) returning *'[req.body.invoice, req.body.itemcode, req.body.quantity])
+      res.json(rows[0])
     } catch (err) {
+      console.log(err)
+      res.send(err)
+    }
+  })
+  router.get('/goods/:barcode', async (req, res) => {
+    try {
+      const { barcode } = req.params
+      const { rows } = await db.query('SELECT * FROM goods WHERE barcode = $1', [barcode])
+      res.json(rows[0])
+    } catch (err) {
+      console.log(err)
       res.send(err)
     }
   })
 
-  router.get('/delete/:supplierid', async (req, res) => {
+  router.post('/additem', async (req, res) => {
+    console.log("masuk")
     try {
-      const { supplierid } = req.params
-
-      const { rows: data } = await db.query('DELETE FROM suppliers WHERE supplierid = $1', [supplierid])
-      res.redirect('/suppliers')
+      const { rows } = db.query('INSET INTO purchaseitems(invoice,itemcode,quantity) VALUES ($1 ,$2 ,$3) returning *'[req.body.invoice, req.body.itemcode, req.body.quantity])
+      res.json(rows[0])
     } catch (err) {
+      console.log(err)
       res.send(err)
     }
   })
-
 
   return router;
 }

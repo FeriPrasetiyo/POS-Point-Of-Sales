@@ -1,0 +1,202 @@
+<%- include ../partials/header %>
+    <!-- awal Navbar -->
+    <div class="container-fluid all-menu">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <H1>Transaction</H1>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label for="invoice" class="form-label">Invoice</label>
+                                    <input type="text" class="form-control" id="invoice"
+                                        value="<%= purchases.invoice %>" placeholder="Invoice" disabled>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">Time</label>
+                                    <input type="text" class="form-control"
+                                        value="<%= moment(purchases.time).format('DD MMM YYYY HH:mm:ss') %>"
+                                        id="exampleFormControlInput1" placeholder="Time" disabled>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">Operator</label>
+                                    <input type="email" class="form-control" value="<%= user.name %>"
+                                        id="exampleFormControlInput1" placeholder="operator" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">Goods Barcode</label>
+                                    <select class="form-select" aria-label="Default select example" name="barcode"
+                                        id="barcode">
+                                        <option value="">Open this select menu</option>
+                                        <% barang.forEach(item=>{ %>
+                                            <option value="<%= item.barcode %>">
+                                                <%= item.barcode + "-" + item.name %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">Good Name</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Good Name">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">Stock</label>
+                                    <input type="number" class="form-control" id="stock" placeholder="Stock">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">Purchase Price</label>
+                                    <input type="number" class="form-control" name="purchaseprice" id="purchaseprice"
+                                        placeholder="Purchase Price">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">Qty</label>
+                                    <input type="text" class="form-control" name="quantity" id="quantity"
+                                        placeholder="Qty">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="totalprice" class="form-label">Total Price</label>
+                                    <input type="text" class="form-control" name="totalprice" id="totalprice"
+                                        placeholder="Total price">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-group dropstart">
+                            <button type="submit" class="btn btn-primary dropdown-toggle-split"
+                                style="background-color: rgb(5, 15, 151);">
+                                <span class="btn-logo"><i class="fa-solid fa-plus"></i></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!-- Dropdown menu links -->
+                            </ul>
+                            <button type="submit" class="btn btn-primary">
+                                <span>Add</span>
+                            </button>
+                        </div>
+                        <hr>
+                        <hr>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Barcode</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>Jacob</td>
+                                    <td>Thornton</td>
+                                    <td>@fat</td>
+                                    <td>Thornton</td>
+                                    <td>@fat</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <div class="mb-3 row">
+                            <label for="inputsummary" class="col-sm-2 col-form-label">Total Summary</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputsummary">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputName" class="col-sm-2 col-form-label">Supplier</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputName">
+                            </div>
+                        </div>
+                        <div class="btn-group dropstart">
+                            <button type="submit" class="btn btn-success dropdown-toggle-split">
+                                <span class="btn-logo"><i class="fa-solid fa-plus"></i></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!-- Dropdown menu links -->
+                            </ul>
+                            <button type="submit" class="btn btn-secondary" style="background-color: rgb(59, 160, 59);">
+                                <span>Finish</span>
+                            </button>
+                        </div>
+                        <a href="/purchases" style="text-decoration: none;">
+                            <div class="btn-group dropstart">
+                                <button type="button" class="btn btn-warning dropdown-toggle-split"
+                                    style="background-color: yellow;">
+                                    <span class="btn-logo"><i class="fa-solid fa-arrow-left"></i></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <!-- Dropdown menu links -->
+                                </ul>
+                                <button type="button" class="btn btn-warning">
+                                    <span>Back</span>
+                                </button>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let invoice = '<%= purchases.invoice %>';
+        $(document).ready(function () {
+            // readDetails()
+            //munculin detail barang ketika dipiih barcode
+            $('#barcode').change(function () {
+                const barcode = $(this).val()
+                $.get(`/purchases/goods/${barcode}`).done(function (data) {
+
+                    $('#name').val(data.name)
+                    $('#stock').val(data.stock)
+                    $('#purchaseprice').val(data.purchaseprice)
+                    $('#quantity').val(0)
+                    $('#totalprice').val(data.totalprice)
+                })
+            })
+
+            $('#quantity').keyup(function () {
+                const quantity = $(this).val()
+                console.log(quantity)
+                const purchaseprice = $('#purchaseprice').val()
+                console.log(purchaseprice)
+                $('#totalprice').val(formatter.format(purchaseprice * quantity))
+            })
+
+        })
+    </script>
+    <%- include ../partials/footer %>

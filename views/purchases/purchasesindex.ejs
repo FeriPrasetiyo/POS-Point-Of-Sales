@@ -3,8 +3,8 @@
     <div class="container-fluid all-menu">
         <div class="row">
             <div class="col">
-                <h2>Units</h2>
-                <h6>this is data of units</h6>
+                <h2>Purchase</h2>
+                <h6>this is data of purcases</h6>
                 <div class="card">
                     <div class="card-header">
                         <a href="/purchases/add" style="text-decoration: none;">
@@ -59,11 +59,16 @@
                 "ajax": "purchases/datatable",
                 "columns": [
                     { "data": "invoice" },
-                    { "data": "time" },
+                    {
+                        "data": "time",
+                        render: function (data, index) {
+                            return moment(data).format('DD MMM YYYY HH:mm:ss')
+                        }
+                    },
                     { "data": "totalsum" },
                     { "data": "supplier" },
                     {
-                        "data": "unit",
+                        "data": "invoice",
                         render: function (data, index) {
                             return `
                                         <a href="/purchases/edit/${data}" style="text-decoration: none;">
