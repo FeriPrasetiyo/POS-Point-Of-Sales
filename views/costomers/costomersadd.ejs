@@ -1,32 +1,35 @@
 <%- include ../partials/header %>
+    <!-- awal Navbar -->
     <div class="container-fluid all-menu">
         <form action="" method="post">
             <div class="row">
                 <div class="col">
-                    <h1>Suppliers</h1>
+                    <h1>customers</h1>
                     <div class="card text-start">
                         <div class="card-header">
-                            <h6 class="text-primary">Form suppliers</h6>
+                            <div class="row">
+                                <div class="col">
+                                    <h6 class="text-primary">Form add</h6>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="mb-3 row">
                                 <label for="staticunit" class="col-sm-2 col-form-label">Name</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="name" value="<%= item.name %>">
+                                    <input type="text" class="form-control" id="name" name="name">
                                 </div>
                             </div>
                             <div class="mb-3 row">
                                 <label for="staticName" class="col-sm-2 col-form-label">Address</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="address" name="address"
-                                        value="<%= item.address %>">
+                                    <input type="text" class="form-control" id="address" name="address">
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label for="staticnote" class="col-sm-2 col-form-label">Phone</label>
+                                <label for="inputnote" class="col-sm-2 col-form-label">Phone</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="phone" name="phone"
-                                        value="<%= item.phone %>">
+                                    <input type="text" class="form-control" id="address" name="phone">
                                 </div>
                             </div>
                         </div>
@@ -43,17 +46,17 @@
                                     <span>Save</span>
                                 </button>
                             </div>
-                            <a href="/suppliers" style="text-decoration: none;">
+                            <a href="/costomers" style="text-decoration: none;">
                                 <div class="btn-group dropstart">
                                     <button type="button" class="btn btn-warning dropdown-toggle-split"
-                                        style="background-color: rgb(117, 117, 0);">
+                                        style="background-color: yellow;">
                                         <span class="btn-logo"><i class="fa-solid fa-rotate-left"></i></span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <!-- Dropdown menu links -->
                                     </ul>
                                     <button type="button" class="btn btn-warning">
-                                        <span>back</span>
+                                        <span>Reset</span>
                                     </button>
                                 </div>
                             </a>
@@ -63,4 +66,5 @@
             </div>
         </form>
     </div>
+
     <%- include ../partials/footer %>
