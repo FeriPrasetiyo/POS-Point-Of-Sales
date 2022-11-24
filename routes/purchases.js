@@ -29,7 +29,7 @@ module.exports = function (db) {
     const sortMode = req.query.order[0].dir
 
     const total = await db.query(`select count(*) as total from purchases${params.length > 0 ? ` where ${params.join(' or ')}` : ''}`)
-    const data = await db.query(`select * from purchases${params.length > 0 ? ` where ${params.join(' or ')}` : ''} order by ${sortBy} ${sortMode} limit ${limit} offset ${offset} `)
+    const data = await db.query(`SELECT purchases.*, suppliers.* FROM purchases LEFT JOIN suppliers ON purchases.supplier = suppliers.supplierid${params.length > 0 ? ` where ${params.join(' or ')}` : ''} order by ${sortBy} ${sortMode} limit ${limit} offset ${offset} `)
     const response = {
       "draw": Number(req.query.draw),
       "recordsTotal": total.rows[0].total,
@@ -49,15 +49,15 @@ module.exports = function (db) {
   })
 
   router.get('/show/:invoice', async (req, res) => {
-    console.log("masuk")
     try {
       const purchases = await db.query('SELECT * FROM purchases WHERE invoice = $1', [req.params.invoice])
       const { rows: data } = await db.query('SELECT barcode, name FROM goods order by barcode')
-      console.log(data)
+      const { rows: suppliers } = await db.query('SELECT supplierid, name FROM suppliers')
       res.render('purchases/purchasesadd', {
         moment,
         purchases: purchases.rows[0],
         barang: data,
+        suppliers,
         user: req.session.user,
         current: 'purchases'
       })
@@ -66,37 +66,70 @@ module.exports = function (db) {
     }
   })
 
-  router.post('/additem', async (req, res) => {
-    console.log("masuk")
+  router.post('/show/:invoice', isLoggedIn, async (req, res) => {
     try {
-      const { rows } = db.query('INSET INTO purchaseitems(invoice,itemcode,quantity) VALUES ($1 ,$2 ,$3) returning *'[req.body.invoice, req.body.itemcode, req.body.quantity])
-      res.json(rows[0])
+      const { invoice } = req.params
+      const { supplier } = req.body
+      const getOperator = { user: req.session.user.userid }
+      const operator = getOperator.user
+      console.log(operator)
+      await db.query('UPDATE purchases SET supplier = $1, operator = $2 WHERE invoice = $3', [supplier, operator, invoice])
+      res.redirect('/purchases')
     } catch (err) {
-      console.log(err)
       res.send(err)
     }
   })
+
   router.get('/goods/:barcode', async (req, res) => {
     try {
       const { barcode } = req.params
       const { rows } = await db.query('SELECT * FROM goods WHERE barcode = $1', [barcode])
       res.json(rows[0])
     } catch (err) {
-      console.log(err)
       res.send(err)
     }
   })
 
   router.post('/additem', async (req, res) => {
-    console.log("masuk")
     try {
-      const { rows } = db.query('INSET INTO purchaseitems(invoice,itemcode,quantity) VALUES ($1 ,$2 ,$3) returning *'[req.body.invoice, req.body.itemcode, req.body.quantity])
+      const { invoice, itemcode, quantity } = req.body
+      const operator = { user: req.session.user.userid }
+      const detail = await db.query('INSERT INTO purchaseitems (invoice, itemcode, quantity)VALUES ($1, $2, $3) returning *', [invoice, itemcode, quantity]);
+      const { rows } = await db.query('SELECT * FROM purchases WHERE invoice = $1', [invoice])
       res.json(rows[0])
     } catch (err) {
-      console.log(err)
       res.send(err)
     }
   })
+
+  router.get('/details/:invoice', isLoggedIn, async (req, res) => {
+    try {
+      const { rows } = await db.query('SELECT pi.*, g.name FROM purchaseitems as pi LEFT JOIN goods as g ON pi.itemcode = g.barcode WHERE pi.invoice = $1 ORDER BY pi.id', [req.params.invoice]);
+      res.json(rows)
+    } catch (err) {
+      res.send(err)
+    }
+  })
+  router.get('/deleteitem/:id', isLoggedIn, async function (req, res, next) {
+    try {
+      const { id } = req.params
+      const { rows: data } = await db.query('DELETE FROM purchaseitems WHERE id = $1 returning *', [id])
+      res.redirect(`/purchases/show/${data[0].invoice}`)
+    } catch (err) {
+      res.send(err)
+    }
+  })
+
+  router.get('/delete/:invoice', isLoggedIn, async (req, res, next) => {
+    try {
+      const { invoice } = req.params
+      const { rows } = await db.query('DELETE FROM purchases WHERE invoice = $1', [invoice])
+
+      res.redirect('/purchases');
+    } catch (err) {
+      res.send(err)
+    }
+  });
 
   return router;
 }

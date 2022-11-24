@@ -66,12 +66,12 @@
                         }
                     },
                     { "data": "totalsum" },
-                    { "data": "supplier" },
+                    { "data": "name" },
                     {
                         "data": "invoice",
                         render: function (data, index) {
                             return `
-                                        <a href="/purchases/edit/${data}" style="text-decoration: none;">
+                                        <a href="/purchases/show/${data}" style="text-decoration: none;">
                                                     <button type="button" class="btn btn-success"
                                                         style="border-radius: 50%;"><i
                                                             class="fa-solid fa-circle-exclamation"></i></button>
