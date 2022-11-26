@@ -68,8 +68,8 @@
                                 <div class="col-4">
                                     <div class="mb-3">
                                         <label for="exampleFormControlInput1" class="form-label">Purchase Price</label>
-                                        <input type="number" class="form-control" name="purchaseprice"
-                                            id="purchaseprice" placeholder="Purchase Price">
+                                        <input type="number" class="form-control" name="sellingprice" id="sellingprice"
+                                            placeholder="Purchase Price">
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -123,7 +123,19 @@
                         <div class="mb-3 row">
                             <label for="totalsum" class="col-sm-2 col-form-label">Total Summary</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="totalsum" value="<%= purchases.totalsum %>">
+                                <input type="text" class="form-control" id="totalsum" value="<%= sales.totalsum %>">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="pay" class="col-sm-2 col-form-label">Pay</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="pay">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="change" class="col-sm-2 col-form-label">Change</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="change">
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -171,17 +183,17 @@
     </div>
     </div>
     <script>
-        let invoice = '<%= purchases.invoice %>';
+        let invoice = '<%= sales.invoice %>';
         $(document).ready(function () {
             readDetails()
             //munculin detail barang ketika dipiih barcode
             $('#barcode').change(function () {
                 const barcode = $(this).val()
-                $.get(`/purchases/goods/${barcode}`).done(function (data) {
+                $.get(`/sales/goods/${barcode}`).done(function (data) {
 
                     $('#name').val(data.name)
                     $('#stock').val(data.stock)
-                    $('#purchaseprice').val(data.purchaseprice)
+                    $('#sellingprice').val(data.sellingprice)
                     $('#quantity').val(0)
                     $('#totalprice').val(data.totalprice)
                 })
@@ -189,23 +201,31 @@
 
             $('#quantity').keyup(function () {
                 const quantity = $(this).val()
-                const purchaseprice = $('#purchaseprice').val()
-                console.log(purchaseprice)
-                $('#totalprice').val(formatter.format(purchaseprice * quantity))
+                const sellingprice = $('#sellingprice').val()
+                console.log(sellingprice)
+                $('#totalprice').val(formatter.format(sellingprice * quantity))
             })
+
+            $('#pay').keyup(function () {
+                const pay = $(this).val()
+                const totalprice = $('#totalprice').val()
+                console.log(pay)
+                $('#change').val(formatter.format(totalprice - pay))
+            })
+
             $('#detail-form').submit(function (e) {
                 e.preventDefault();
                 const itemcode = $('#barcode').val()
                 const quantity = $('#quantity').val()
 
-                $.post('/purchases/additem', { invoice, itemcode, quantity }).done(function (data) {
+                $.post('/sales/additem', { invoice, itemcode, quantity }).done(function (data) {
                     readDetails()
                     $('#totalsum').val(formatter.format(data.totalsum))
                 })
             })
         })
         const readDetails = () => {
-            $.get(`/purchases/details/${invoice}`).done(function (data) {
+            $.get(`/sales/details/${invoice}`).done(function (data) {
                 let html = ''
                 data.forEach((item, index) => {
                     html += `
@@ -223,7 +243,7 @@
                         ${item.quantity}
                     </td>
                     <td>
-                        ${formatter.format(item.purchaseprice)}
+                        ${formatter.format(item.sellingprice)}
                     </td>
                     <td>
                         ${formatter.format(item.totalprice)}
@@ -244,7 +264,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                            <a type="button" href="/purchases/deleteitem/${item.id}" class="btn btn-primary">Yes</a>
+                            <a type="button" href="/sales/deleteitem/${item.id}" class="btn btn-primary">Yes</a>
                         </div>
                         </div>
                     </div>
