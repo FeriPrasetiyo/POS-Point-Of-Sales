@@ -69,12 +69,12 @@ module.exports = function (db) {
   router.post('/show/:invoice', isLoggedIn, async (req, res) => {
     try {
       const { invoice } = req.params
-      const { supplier } = req.body
+      const { pay, change, customer } = req.body
       const getOperator = { user: req.session.user.userid }
       const operator = getOperator.user
       console.log(operator)
-      await db.query('UPDATE purchases SET supplier = $1, operator = $2 WHERE invoice = $3', [supplier, operator, invoice])
-      res.redirect('/purchases')
+      await db.query('UPDATE sales SET pay = $1, change = $2, customer = $3 WHERE invoice = $4', [pay, change, customer, operator, invoice])
+      res.redirect('/sales')
     } catch (err) {
       res.send(err)
     }
