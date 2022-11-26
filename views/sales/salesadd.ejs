@@ -67,7 +67,7 @@
                             <div class="row">
                                 <div class="col-4">
                                     <div class="mb-3">
-                                        <label for="exampleFormControlInput1" class="form-label">Purchase Price</label>
+                                        <label for="exampleFormControlInput1" class="form-label">Selling price</label>
                                         <input type="number" class="form-control" name="sellingprice" id="sellingprice"
                                             placeholder="Purchase Price">
                                     </div>
@@ -123,7 +123,7 @@
                         <div class="mb-3 row">
                             <label for="totalsum" class="col-sm-2 col-form-label">Total Summary</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="totalsum" value="<%= sales.totalsum %>">
+                                <input type="text" class="form-control" id="totalsum">
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -139,9 +139,9 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="inputName" class="col-sm-2 col-form-label">Supplier</label>
+                            <label for="inputName" class="col-sm-2 col-form-label">customer</label>
                             <div class="col-sm-10">
-                                <select class="form-select" aria-label="Default select example" name="supplier">
+                                <select class="form-select" aria-label="Default select example" name="customer">
                                     <option value="">Open this select menu</option>
                                     <% customer.forEach(item=>{ %>
                                         <option value="<%= item.customerid %>">
@@ -195,22 +195,20 @@
                     $('#stock').val(data.stock)
                     $('#sellingprice').val(data.sellingprice)
                     $('#quantity').val(0)
-                    $('#totalprice').val(data.totalprice)
                 })
             })
 
             $('#quantity').keyup(function () {
                 const quantity = $(this).val()
                 const sellingprice = $('#sellingprice').val()
-                console.log(sellingprice)
                 $('#totalprice').val(formatter.format(sellingprice * quantity))
             })
 
             $('#pay').keyup(function () {
                 const pay = $(this).val()
-                const totalprice = $('#totalprice').val()
-                console.log(pay)
-                $('#change').val(formatter.format(totalprice - pay))
+                const totalsum = $('#totalsum').val()
+                console.log(totalsum)
+                $('#change').val(pay - totalsum)
             })
 
             $('#detail-form').submit(function (e) {
@@ -220,7 +218,7 @@
 
                 $.post('/sales/additem', { invoice, itemcode, quantity }).done(function (data) {
                     readDetails()
-                    $('#totalsum').val(formatter.format(data.totalsum))
+                    $('#totalsum').val(data.totalsum)
                 })
             })
         })

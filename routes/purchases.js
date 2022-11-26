@@ -72,7 +72,6 @@ module.exports = function (db) {
       const { supplier } = req.body
       const getOperator = { user: req.session.user.userid }
       const operator = getOperator.user
-      console.log(operator)
       await db.query('UPDATE purchases SET supplier = $1, operator = $2 WHERE invoice = $3', [supplier, operator, invoice])
       res.redirect('/purchases')
     } catch (err) {

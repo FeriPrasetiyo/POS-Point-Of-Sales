@@ -72,8 +72,7 @@ module.exports = function (db) {
       const { pay, change, customer } = req.body
       const getOperator = { user: req.session.user.userid }
       const operator = getOperator.user
-      console.log(operator)
-      await db.query('UPDATE sales SET pay = $1, change = $2, customer = $3 WHERE invoice = $4', [pay, change, customer, operator, invoice])
+      await db.query('UPDATE sales SET pay = $1, change = $2, customer = $3, operator = $4 WHERE invoice = $5', [pay, change, customer, Number(operator), invoice])
       res.redirect('/sales')
     } catch (err) {
       res.send(err)
@@ -93,7 +92,6 @@ module.exports = function (db) {
   router.post('/additem', async (req, res) => {
     try {
       const { invoice, itemcode, quantity } = req.body
-      console.log(req.body)
       const detail = await db.query('INSERT INTO saleitems (invoice, itemcode, quantity)VALUES ($1, $2, $3) returning *', [invoice, itemcode, quantity]);
       const { rows } = await db.query('SELECT * FROM sales WHERE invoice = $1', [invoice])
       res.json(rows[0])

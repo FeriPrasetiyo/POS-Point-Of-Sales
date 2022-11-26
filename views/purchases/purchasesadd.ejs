@@ -14,14 +14,14 @@
                                     <div class="mb-3">
                                         <label for="invoice" class="form-label">Invoice</label>
                                         <input type="text" class="form-control" id="invoice"
-                                            value="<%= sales.invoice %>" placeholder="Invoice" disabled>
+                                            value="<%= purchases.invoice %>" placeholder="Invoice" disabled>
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="mb-3">
                                         <label for="exampleFormControlInput1" class="form-label">Time</label>
                                         <input type="text" class="form-control"
-                                            value="<%= moment(sales.time).format('DD MMM YYYY HH:mm:ss') %>"
+                                            value="<%= moment(purchases.time).format('DD MMM YYYY HH:mm:ss') %>"
                                             id="exampleFormControlInput1" placeholder="Time" disabled>
                                     </div>
                                 </div>
@@ -131,8 +131,8 @@
                             <div class="col-sm-10">
                                 <select class="form-select" aria-label="Default select example" name="supplier">
                                     <option value="">Open this select menu</option>
-                                    <% customer.forEach(item=>{ %>
-                                        <option value="<%= item.customerid %>">
+                                    <% suppliers.forEach(item=>{ %>
+                                        <option value="<%= item.supplierid %>">
                                             <%= item.name %>
                                         </option>
                                         <% }) %>
@@ -150,7 +150,7 @@
                                 <span>Finish</span>
                             </button>
                         </div>
-                        <a href="/sales" style="text-decoration: none;">
+                        <a href="/purchases" style="text-decoration: none;">
                             <div class="btn-group dropstart">
                                 <button type="button" class="btn btn-warning dropdown-toggle-split"
                                     style="background-color: yellow;">
@@ -190,7 +190,6 @@
             $('#quantity').keyup(function () {
                 const quantity = $(this).val()
                 const purchaseprice = $('#purchaseprice').val()
-                console.log(purchaseprice)
                 $('#totalprice').val(formatter.format(purchaseprice * quantity))
             })
             $('#detail-form').submit(function (e) {
