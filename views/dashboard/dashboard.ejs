@@ -1,11 +1,154 @@
 <%- include ../partials/header %>
     <!-- awal Navbar -->
     <div class="container-fluid all-menu">
-        <div class="row">
-            <div class="col">
-                <h2>Dashboard</h2>
+        <h1>Dashboard</h1>
+        <div class="card">
+            <div class="card-header">
+                Data settings
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="startDate">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="endDate" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                <div class="btn-group dropstart">
+                    <button type="submit" class="btn btn-success dropdown-toggle-split">
+                        <span class="btn-logo"><i class="fa-solid fa-check"></i></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <!-- Dropdown menu links -->
+                    </ul>
+                    <button type="submit" class="btn btn-secondary" style="background-color: rgb(59, 160, 59);">
+                        <span>Query</span>
+                    </button>
+                </div>
+                <a href="/dashboard" style="text-decoration: none;">
+                    <div class="btn-group dropstart">
+                        <button type="button" class="btn btn-warning dropdown-toggle-split"
+                            style="background-color: rgb(117, 117, 0);">
+                            <span class="btn-logo"><i class="fa-solid fa-arrow-left"></i></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <!-- Dropdown menu links -->
+                        </ul>
+                        <button type="button" class="btn btn-warning">
+                            <span>Reset</span>
+                        </button>
+                    </div>
+                </a>
             </div>
         </div>
+        <br>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <div class="card" style="width: 28rem; border-left-color: blue; border-left-width: 5px;">
+                        <div class="card-body">
+                            <h6 style="font-size: 15px; color: blue;">PURCHASES</h6>
+                            <h5>Rp 715.000,00</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card" style="width: 28rem; border-left-color: green; border-left-width: 5px;">
+                        <div class="card-body">
+                            <h6 style="font-size: 15px; color: green;">SALES</h6>
+                            <h5>Rp 859.000,00</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card"
+                        style="width: 28rem; border-left-color: rgba(0, 255, 255, 0.623)  ; border-left-width: 5px;">
+                        <div class="card-body">
+                            <h6 style="font-size: 15px; color: rgba(0, 255, 255, 0.795);">EARNING</h6>
+                            <h5>Rp 144.000,00</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card" style="width: 28rem; border-left-color: gold; border-left-width: 5px;">
+                        <div class="card-body">
+                            <h6 style="font-size: 15px; color: gold;">TOTAL SALES</h6>
+                            <h5>4</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 style="color: blue;">Earnings Overview</h6>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 style="color: blue;">Revenue Sources</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-pie pt-4">
+                            <canvas id="myPieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+    <script>
+        var ctx = document.getElementById("myPieChart");
+        var myPieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ["Direct", "Referral", "Social"],
+                datasets: [{
+                    data: [55, 30, 15],
+                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                    hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: false
+                },
+                cutoutPercentage: 80,
+            },
+        });
+
+    </script>
 
     <%- include ../partials/footer %>

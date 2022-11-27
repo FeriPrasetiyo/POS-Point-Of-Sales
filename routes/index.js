@@ -14,10 +14,6 @@ module.exports = function (db) {
     });
   });
 
-  router.get('/dashboard', isLoggedIn, function (req, res, next) {
-    res.render('dashboard/dashboard', { user: req.session.user, current: 'dashboard' });
-  });
-
   router.get('/users', isLoggedIn, function (req, res, next) {
     db.query('SELECT * FROM users', (err, data) => {
       if (err) return res.send(err)
