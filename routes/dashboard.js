@@ -12,6 +12,7 @@ module.exports = function (db) {
   });
 
   router.get('/datatable', async (req, res) => {
+    console.log("masuk table")
     let params = []
 
     if (req.query.search.value) {
