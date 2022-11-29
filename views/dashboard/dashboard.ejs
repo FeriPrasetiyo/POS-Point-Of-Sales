@@ -57,7 +57,9 @@
                     <div class="card" style="width: 27rem; border-left-color: blue; border-left-width: 5px;">
                         <div class="card-body">
                             <h6 style="font-size: 15px; color: blue;">PURCHASES</h6>
-                            <h5>Rp 715.000,00</h5>
+                            <h5>
+                                <%= purhcases[0].sum %>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -65,7 +67,9 @@
                     <div class="card" style="width: 27rem; border-left-color: green; border-left-width: 5px;">
                         <div class="card-body">
                             <h6 style="font-size: 15px; color: green;">SALES</h6>
-                            <h5>Rp 859.000,00</h5>
+                            <h5>
+                                <%= sales[0].sum %>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -74,7 +78,9 @@
                         style="width: 27rem; border-left-color: rgba(0, 255, 255, 0.623)  ; border-left-width: 5px;">
                         <div class="card-body">
                             <h6 style="font-size: 15px; color: rgba(0, 255, 255, 0.795);">EARNING</h6>
-                            <h5>Rp 144.000,00</h5>
+                            <h5>
+                                <%= purhcases[0].sum - sales[0].sum %>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -82,7 +88,9 @@
                     <div class="card" style="width: 27rem; border-left-color: gold; border-left-width: 5px;">
                         <div class="card-body">
                             <h6 style="font-size: 15px; color: gold;">TOTAL SALES</h6>
-                            <h5>4</h5>
+                            <h5>
+                                <%= customers[0].count %>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -121,9 +129,6 @@
                             </span>
                             <span class="mr-2">
                                 <i class="fas fa-circle text-success"></i> Social
-                            </span>
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-info"></i> Referral
                             </span>
                         </div>
                     </div>
@@ -164,73 +169,16 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
-
     </div>
 
     </div>
     <script>
-        var ctx = document.getElementById("myPieChart");
-        var myPieChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: [55, 30, 15],
-                    cutout: '85%',
-                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-                    hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
-                    hoverBorderColor: "rgba(234, 236, 244, 1)",
-                }],
-            },
-            options: {
-                maintainAspectRatio: false,
-                tooltips: {
-                    backgroundColor: "rgb(255,255,255)",
-                    bodyFontColor: "#858796",
-                    borderColor: '#dddfeb',
-                    borderWidth: 1,
-                    xPadding: 15,
-                    yPadding: 15,
-                    displayColors: false,
-                    caretPadding: 10,
-                },
-                legend: {
-                    display: false
-                },
-                cutoutPercentage: 80,
-            },
+        let countUMUM = null
+        let countMember = null
+
+        $(document).ready(function () {
+            readData()
         });
-        function number_format(number, decimals, dec_point, thousands_sep) {
-            // *     example: number_format(1234.56, 2, ',', ' ');
-            // *     return: '1 234,56'
-            number = (number + '').replace(',', '').replace(' ', '');
-            var n = !isFinite(+number) ? 0 : +number,
-                prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-                sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-                dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-                s = '',
-                toFixedFix = function (n, prec) {
-                    var k = Math.pow(10, prec);
-                    return '' + Math.round(n * k) / k;
-                };
-            // Fix for IE parseFloat(0.55).toFixed(0) = 0;
-            s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-            if (s[0].length > 3) {
-                s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-            }
-            if ((s[1] || '').length < prec) {
-                s[1] = s[1] || '';
-                s[1] += new Array(prec - s[1].length + 1).join('0');
-            }
-            return s.join(dec);
-        }
 
         // Area Chart Example
         var ctx = document.getElementById("myAreaChart");
@@ -322,20 +270,87 @@
                 }
             }
         });
-        $(document).ready(function () {
-            $('#example').DataTable({
-                "lengthMenu": [[3, 6, 20], [3, 6, 20]],
-                "processing": true,
-                "serverSide": true,
-                "ajax": "dashboard/datatable",
-                "columns": [
-                    { "data": "totalsum" },
-                    { "data": "pay" },
-                    { "data": "change" },
-                    { "data": "customer" },
-                ]
+
+        const readData = () => {
+            $.ajax({
+                method: "GET",
+                url: "dashboard/revsource",
+            }).done(function (res) {
+                const { member, direct } = res
+                countUMUM = member[0].count
+                countMember = direct[0].count
+
+                var ctx = document.getElementById("myPieChart");
+                var myPieChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [countUMUM, countMember],
+                            cutout: '85%',
+                            backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                            hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                            hoverBorderColor: "rgba(234, 236, 244, 1)",
+                        }],
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        tooltips: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            xPadding: 15,
+                            yPadding: 15,
+                            displayColors: false,
+                            caretPadding: 10,
+                        },
+                        legend: {
+                            display: false
+                        },
+                        cutoutPercentage: 80,
+                    },
+                });
+                function number_format(number, decimals, dec_point, thousands_sep) {
+                    // *     example: number_format(1234.56, 2, ',', ' ');
+                    // *     return: '1 234,56'
+                    number = (number + '').replace(',', '').replace(' ', '');
+                    var n = !isFinite(+number) ? 0 : +number,
+                        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                        s = '',
+                        toFixedFix = function (n, prec) {
+                            var k = Math.pow(10, prec);
+                            return '' + Math.round(n * k) / k;
+                        };
+                    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+                    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+                    if (s[0].length > 3) {
+                        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+                    }
+                    if ((s[1] || '').length < prec) {
+                        s[1] = s[1] || '';
+                        s[1] += new Array(prec - s[1].length + 1).join('0');
+                    }
+                    return s.join(dec);
+                }
+            }).fail(function (err) {
+                alert('err tu')
             })
-        });
+            // $('#example').DataTable({
+            //     "lengthMenu": [[3, 6, 20], [3, 6, 20]],
+            //     "processing": true,
+            //     "serverSide": true,
+            //     "ajax": "dashboard/datatable",
+            //     "columns": [
+            //         { "data": "totalsum" },
+            //         { "data": "pay" },
+            //         { "data": "change" },
+            //         { "data": "customer" },
+            //     ]
+            // })
+        }
+
     </script>
 
     <%- include ../partials/footer %>

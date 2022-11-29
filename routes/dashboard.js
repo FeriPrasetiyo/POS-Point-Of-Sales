@@ -6,13 +6,33 @@ const { isLoggedIn } = require('../helpers/util')
 /* GET home page. */
 module.exports = function (db) {
 
-  router.get('/', isLoggedIn, function (req, res, next) {
-    console.log('masuk')
-    res.render('dashboard/dashboard', { user: req.session.user, current: 'dashboard' });
+  router.get('/', isLoggedIn, async function (req, res, next) {
+    try {
+      const { rows: purhcases } = await db.query('SELECT sum(totalsum) FROM purchases')
+      const { rows: sales } = await db.query('SELECT sum(totalsum) FROM sales')
+      const { rows: customers } = await db.query('SELECT COUNT(*) from suppliers')
+
+      res.render('dashboard/dashboard', { user: req.session.user, current: 'dashboard', purhcases, sales, customers });
+    } catch (err) {
+
+    }
   });
 
+  router.get('/revsource', isLoggedIn, async (req, res, next) => {
+    try {
+      const { rows: direct } = await db.query('SELECT COUNT(*) FROM sales WHERE customer = 1')
+      console.log(direct)
+      const { rows: member } = await db.query('SELECT COUNT(*) FROM sales WHERE customer != 1')
+      console.log(member)
+
+      res.json({ member, direct })
+    } catch (error) {
+      console.log(error)
+    }
+  })
+
+
   router.get('/datatable', async (req, res) => {
-    console.log("masuk table")
     let params = []
 
     if (req.query.search.value) {
