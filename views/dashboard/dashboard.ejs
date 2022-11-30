@@ -79,7 +79,7 @@
                         <div class="card-body">
                             <h6 style="font-size: 15px; color: rgba(0, 255, 255, 0.795);">EARNING</h6>
                             <h5>
-                                <%= purhcases[0].sum - sales[0].sum %>
+                                <%= sales[0].sum - purhcases[0].sum %>
                             </h5>
                         </div>
                     </div>
@@ -125,10 +125,10 @@
                         </div>
                         <div class="mt-4 text-center small">
                             <span class="mr-2">
-                                <i class="fas fa-circle text-primary"></i> Direct
+                                <i class="fas fa-circle text-primary"></i> Umum
                             </span>
                             <span class="mr-2">
-                                <i class="fas fa-circle text-success"></i> Social
+                                <i class="fas fa-circle text-success"></i> Direct
                             </span>
                         </div>
                     </div>
@@ -175,110 +175,29 @@
     <script>
         let countUMUM = null
         let countMember = null
+        let valuePurchases = null
+        let valueSales = null
 
         $(document).ready(function () {
             readData()
         });
 
         // Area Chart Example
-        var ctx = document.getElementById("myAreaChart");
-        var myLineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ["Oct", "Nov", "Dec"],
-                datasets: [{
-                    label: "Earnings",
-                    lineTension: 0.3,
-                    backgroundColor: "rgba(78, 115, 223, 0.05)",
-                    borderColor: "rgba(78, 115, 223, 1)",
-                    pointRadius: 3,
-                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
-                    pointBorderColor: "rgba(78, 115, 223, 1)",
-                    pointHoverRadius: 3,
-                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-                    pointHitRadius: 10,
-                    pointBorderWidth: 2,
-                    data: [30000, 25000, 40000],
-                }],
-            },
-            options: {
-                plugins: { legend: { display: false } },
-                maintainAspectRatio: false,
-                layout: {
-                    padding: {
-                        left: 10,
-                        right: 25,
-                        top: 25,
-                        bottom: 0
-                    }
-                },
-                scales: {
-                    xAxes: [{
-                        time: {
-                            unit: 'date'
-                        },
-                        gridLines: {
-                            display: false,
-                            drawBorder: false
-                        },
-                        ticks: {
-                            maxTicksLimit: 7
-                        }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            maxTicksLimit: 5,
-                            padding: 10,
-                            // Include a dollar sign in the ticks
-                            callback: function (value, index, values) {
-                                return '$' + number_format(value);
-                            }
-                        },
-                        gridLines: {
-                            color: "rgb(234, 236, 244)",
-                            zeroLineColor: "rgb(234, 236, 244)",
-                            drawBorder: false,
-                            borderDash: [2],
-                            zeroLineBorderDash: [2]
-                        }
-                    }],
-                },
-                legend: {
-                    display: false
-                },
-                tooltips: {
-                    backgroundColor: "rgb(255,255,255)",
-                    bodyFontColor: "#858796",
-                    titleMarginBottom: 10,
-                    titleFontColor: '#6e707e',
-                    titleFontSize: 14,
-                    borderColor: '#dddfeb',
-                    borderWidth: 1,
-                    xPadding: 15,
-                    yPadding: 15,
-                    displayColors: false,
-                    intersect: false,
-                    mode: 'index',
-                    caretPadding: 10,
-                    callbacks: {
-                        label: function (tooltipItem, chart) {
-                            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                            return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
-                        }
-                    }
-                }
-            }
-        });
+
 
         const readData = () => {
             $.ajax({
                 method: "GET",
                 url: "dashboard/revsource",
             }).done(function (res) {
-                const { member, direct } = res
-                countUMUM = member[0].count
-                countMember = direct[0].count
+                const { member, direct, totalpurch, totalsales } = res
+                valuePurchases = totalpurch[0].sum
+                valueSales = totalsales[0].sum
+                let ketunTungan = valueSales - valuePurchases
+
+
+                countMember = member[0].count
+                countUMUM = direct[0].count
 
                 var ctx = document.getElementById("myPieChart");
                 var myPieChart = new Chart(ctx, {
@@ -334,22 +253,106 @@
                     }
                     return s.join(dec);
                 }
+
+                var ctx = document.getElementById("myAreaChart");
+                var myLineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ["Oct 22", "Nov 22", "Dec 22"],
+                        datasets: [{
+                            label: "Earnings",
+                            lineTension: 0.3,
+                            backgroundColor: "rgba(78, 115, 223, 0.05)",
+                            borderColor: "rgba(78, 115, 223, 1)",
+                            pointRadius: 3,
+                            pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                            pointBorderColor: "rgba(78, 115, 223, 1)",
+                            pointHoverRadius: 3,
+                            pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                            pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                            pointHitRadius: 10,
+                            pointBorderWidth: 2,
+                            data: [ketunTungan, 25000, 40000],
+                        }],
+                    },
+                    options: {
+                        plugins: { legend: { display: false } },
+                        maintainAspectRatio: false,
+                        layout: {
+                            padding: {
+                                left: 10,
+                                right: 25,
+                                top: 25,
+                                bottom: 0
+                            }
+                        },
+                        scales: {
+                            xAxes: [{
+                                time: {
+                                    unit: 'date'
+                                },
+                                gridLines: {
+                                    display: false,
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    maxTicksLimit: 7
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    maxTicksLimit: 5,
+                                    padding: 10,
+                                    // Include a dollar sign in the ticks
+                                    callback: function (value, index, values) {
+                                        return '$' + number_format(value);
+                                    }
+                                },
+                                gridLines: {
+                                    color: "rgb(234, 236, 244)",
+                                    zeroLineColor: "rgb(234, 236, 244)",
+                                    drawBorder: false,
+                                    borderDash: [2],
+                                    zeroLineBorderDash: [2]
+                                }
+                            }],
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltips: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
+                            titleMarginBottom: 10,
+                            titleFontColor: '#6e707e',
+                            titleFontSize: 14,
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            xPadding: 15,
+                            yPadding: 15,
+                            displayColors: false,
+                            intersect: false,
+                            mode: 'index',
+                            caretPadding: 10,
+                            callbacks: {
+                                label: function (tooltipItem, chart) {
+                                    var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                                    return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                                }
+                            }
+                        }
+                    }
+                });
             }).fail(function (err) {
                 alert('err tu')
             })
-            // $('#example').DataTable({
-            //     "lengthMenu": [[3, 6, 20], [3, 6, 20]],
-            //     "processing": true,
-            //     "serverSide": true,
-            //     "ajax": "dashboard/datatable",
-            //     "columns": [
-            //         { "data": "totalsum" },
-            //         { "data": "pay" },
-            //         { "data": "change" },
-            //         { "data": "customer" },
-            //     ]
-            // })
         }
+
+
+        // $('#example').DataTable({
+        //     "lengthMenu": [[3, 6, 20], [3, 6, 20]],
+        //     "ajax": "dashboard/datatable",
+        // })
 
     </script>
 
