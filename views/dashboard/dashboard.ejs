@@ -156,10 +156,10 @@
                                         </tr>
                                     </thead>
                                     <tfoot>
-                                        <th>Mounthly</th>
-                                        <th>Expense</th>
-                                        <th>Revenue</th>
-                                        <th>Earning</th>
+                                        <th>Total</th>
+                                        <th> </th>
+                                        <th> </th>
+                                        <th></th>
                                     </tfoot>
                                 </table>
                             </div>
@@ -177,9 +177,16 @@
         let countMember = null
         let valuePurchases = null
         let valueSales = null
+        let getBulan = []
+        let hasilPendapatan = []
 
         $(document).ready(function () {
             readData()
+
+
+            $('#example').DataTable({
+                "lengthMenu": [[1, 5, -1], [1, 5, "All"]]
+            });
         });
 
         // Area Chart Example
@@ -191,9 +198,23 @@
                 url: "dashboard/revsource",
             }).done(function (res) {
                 const { member, direct, totalpurch, totalsales } = res
-                valuePurchases = totalpurch[0].sum
+                for (let i = 0; i < totalpurch.length; i++) {
+                    getBulan.push(totalpurch[i].monthly)
+                    for (let j = 0; j < totalsales.length; j++) {
+                        if (totalpurch[i].monthly != totalsales[j].monthly) {
+                            hasilPendapatan.push(-totalpurch[i].totalpurch)
+                        } else if (totalpurch[i].monthly == totalsales[j].monthly) {
+                            hasilPendapatan.push(totalsales[j].totalsales - totalpurch[i].totalpurch)
+                        } else {
+                            hasilPendapatan(totalsales[j].totalsales)
+                        }
+                    }
+                }
+                console.log(hasilPendapatan)
+
+                valuePurchases = totalpurch[0].totalpurch
                 valueSales = totalsales[0].sum
-                let ketunTungan = valueSales - valuePurchases
+                // let ketunTungan = valueSales - valuePurchases
 
 
                 countMember = member[0].count
@@ -258,7 +279,7 @@
                 var myLineChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: ["Oct 22", "Nov 22", "Dec 22"],
+                        labels: getBulan,
                         datasets: [{
                             label: "Earnings",
                             lineTension: 0.3,
@@ -272,7 +293,7 @@
                             pointHoverBorderColor: "rgba(78, 115, 223, 1)",
                             pointHitRadius: 10,
                             pointBorderWidth: 2,
-                            data: [ketunTungan, 25000, 40000],
+                            data: hasilPendapatan,
                         }],
                     },
                     options: {
@@ -347,13 +368,6 @@
                 alert('err tu')
             })
         }
-
-
-        // $('#example').DataTable({
-        //     "lengthMenu": [[3, 6, 20], [3, 6, 20]],
-        //     "ajax": "dashboard/datatable",
-        // })
-
     </script>
 
     <%- include ../partials/footer %>

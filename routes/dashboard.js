@@ -24,25 +24,13 @@ module.exports = function (db) {
       const { rows: member } = await db.query('SELECT COUNT(*) FROM sales WHERE customer != 1')
 
 
-      const { rows: totalpurch } = await db.query("SELECT sum(totalsum)FROM purchases WHERE time BETWEEN '20221125' AND '20221225'")
-      console.log(totalpurch)
-      const { rows: totalsales } = await db.query("SELECT sum(totalsum)FROM sales WHERE time BETWEEN '20221125' AND '20221225'")
+      const { rows: totalpurch } = await db.query("SELECT to_char(time, 'Mon YY') AS monthly, to_char(time, 'MM YY') AS forsort, sum(totalsum) AS totalpurch FROM purchases GROUP BY monthly, forsort ORDER BY forsort")
+      const { rows: totalsales } = await db.query("SELECT to_char(time, 'Mon YY') AS monthly, to_char(time, 'MM YY') AS forsort, sum(totalsum) AS totalsales FROM sales GROUP BY monthly, forsort ORDER BY forsort")
       res.json({ member, direct, totalpurch, totalsales })
     } catch (err) {
       res.send(err)
     }
   })
-
-
-  // router.get('/datatable', isLoggedIn, async (req, res, next) => {
-  //   try {
-  //     const { rows: data } = await db.query('SELECT time FROM sales CROSS JOIN purchases')
-  //     console.log(data, "<<")
-
-  //   } catch (err) {
-  //     res.send(err)
-  //   }
-  // })
 
   return router;
 }
