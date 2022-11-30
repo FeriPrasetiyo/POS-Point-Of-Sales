@@ -143,29 +143,22 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <table id="example" class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Mounthly</th>
-                                            <th>Expense</th>
-                                            <th>Revenue</th>
-                                            <th>Earning</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <th>Total</th>
-                                        <th> </th>
-                                        <th> </th>
-                                        <th></th>
-                                    </tfoot>
-                                </table>
-                            </div>
+                    <div class="row">
+                        <div class="col">
+                            <table id="example" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Mounthly</th>
+                                        <th>Expense</th>
+                                        <th>Revenue</th>
+                                        <th>Earning</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -182,10 +175,19 @@
 
         $(document).ready(function () {
             readData()
-
-
-            $('#example').DataTable({
-                "lengthMenu": [[1, 5, -1], [1, 5, "All"]]
+            $(document).ready(function () {
+                $('#example').DataTable({
+                    "lengthMenu": [[3, 6, 20], [3, 6, 20]],
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": "dashboard/datatable",
+                    "columns": [
+                        { "data": "barcode" },
+                        { "data": "name" },
+                        { "data": "stock" },
+                        { "data": "purchaseprice" }
+                    ]
+                });
             });
         });
 
@@ -201,16 +203,13 @@
                 for (let i = 0; i < totalpurch.length; i++) {
                     getBulan.push(totalpurch[i].monthly)
                     for (let j = 0; j < totalsales.length; j++) {
-                        if (totalpurch[i].monthly != totalsales[j].monthly) {
-                            hasilPendapatan.push(-totalpurch[i].totalpurch)
-                        } else if (totalpurch[i].monthly == totalsales[j].monthly) {
+                        if (totalpurch[i].monthly == totalsales[j].monthly) {
                             hasilPendapatan.push(totalsales[j].totalsales - totalpurch[i].totalpurch)
-                        } else {
-                            hasilPendapatan(totalsales[j].totalsales)
                         }
                     }
                 }
-                console.log(hasilPendapatan)
+                hasilPendapatan.push(Number(totalpurch[0].totalpurch))
+                console.log(hasilPendapatan, "<<<")
 
                 valuePurchases = totalpurch[0].totalpurch
                 valueSales = totalsales[0].sum
