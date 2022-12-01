@@ -37,7 +37,7 @@ module.exports = function (db) {
     let params = []
 
     if (req.query.search.value) {
-      params.push(`barcode ilike '%${req.query.search.value}%'`)
+      params.push(`time ilike '%${req.query.search.value}%'`)
     }
 
     const limit = req.query.length
@@ -45,13 +45,15 @@ module.exports = function (db) {
     const sortBy = req.query.columns[req.query.order[0].column].data
     const sortMode = req.query.order[0].dir
 
-    const total = await db.query(`select count(*) as total from goods${params.length > 0 ? ` where ${params.join(' or ')}` : ''}`)
-    const data = await db.query(`select * from goods${params.length > 0 ? ` where ${params.join(' or ')}` : ''} order by ${sortBy} ${sortMode} limit ${limit} offset ${offset} `)
+    const total = await db.query(`select count(*) as total from sales${params.length > 0 ? ` where ${params.join(' or ')}` : ''}`)
+    const { rows: totalPurchases } = await db.query(`select count(*) as total from purchases${params.length > 0 ? ` where ${params.join(' or ')}` : ''}`)
+    const data = await db.query(`SELECT to_char(time, 'Mon YY') AS monthly, to_char(time, 'MM YY') AS forsort, sum(totalsum) AS totalsales FROM sales GROUP BY monthly, forsort ORDER BY forsort${params.length > 0 ? ` where ${params.join(' or ')}` : ''} order by ${sortBy} ${sortMode} limit ${limit} offset ${offset} `)
+    const { rows: dataPurchases } = await db.query(`SELECT to_char(time, 'Mon YY') AS monthly, to_char(time, 'MM YY') AS forsort, sum(totalsum) AS totalpurchases FROM purchases GROUP BY monthly, forsort ORDER BY forsort${params.length > 0 ? ` where ${params.join(' or ')}` : ''} order by ${sortBy} ${sortMode} limit ${limit} offset ${offset} `)
     const response = {
       "draw": Number(req.query.draw),
-      "recordsTotal": total.rows[0].total,
-      "recordsFiltered": total.rows[0].total,
-      "data": data.rows
+      "recordsTotal": total.rows[0].total, dataPurchases,
+      "recordsFiltered": total.rows[0].total, dataPurchases,
+      "data": data.rows, totalPurchases
     }
     res.json(response)
   })

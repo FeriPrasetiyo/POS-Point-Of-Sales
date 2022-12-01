@@ -175,22 +175,19 @@
 
         $(document).ready(function () {
             readData()
-            $(document).ready(function () {
-                $('#example').DataTable({
-                    "lengthMenu": [[3, 6, 20], [3, 6, 20]],
-                    "processing": true,
-                    "serverSide": true,
-                    "ajax": "dashboard/datatable",
-                    "columns": [
-                        { "data": "barcode" },
-                        { "data": "name" },
-                        { "data": "stock" },
-                        { "data": "purchaseprice" }
-                    ]
-                });
+            $('#example').DataTable({
+                "lengthMenu": [[3, 6, 20], [3, 6, 20]],
+                "processing": true,
+                "serverSide": true,
+                "ajax": "dashboard/datatable",
+                "columns": [
+                    { "data": "barcode" },
+                    { "data": "name" },
+                    { "data": "stock" },
+                    { "data": "purchaseprice" }
+                ]
             });
         });
-
         // Area Chart Example
 
 
@@ -200,16 +197,25 @@
                 url: "dashboard/revsource",
             }).done(function (res) {
                 const { member, direct, totalpurch, totalsales } = res
+
                 for (let i = 0; i < totalpurch.length; i++) {
                     getBulan.push(totalpurch[i].monthly)
-                    for (let j = 0; j < totalsales.length; j++) {
-                        if (totalpurch[i].monthly == totalsales[j].monthly) {
-                            hasilPendapatan.push(totalsales[j].totalsales - totalpurch[i].totalpurch)
-                        }
-                    }
                 }
-                hasilPendapatan.push(Number(totalpurch[0].totalpurch))
-                console.log(hasilPendapatan, "<<<")
+
+                let data = totalpurch.concat(totalsales)
+                let newData = {}
+                data.forEach(item => {
+                    if (newData[item.forsort]) {
+                        newData[item.forsort] = { monthly: item.monthly, expense: item.totalpurch ? item.totalpurch : newData[item.forsort].expense, revenue: item.totalsales ? item.totalsales : newData[item.forsort].revenue }
+                    } else {
+                        newData[item.forsort] = { monthly: item.monthly, expense: item.totalpurch ? item.totalpurch : 0, revenue: item.totalsales ? item.totalsales : 0 }
+                    }
+                });
+
+                for (const key in newData) {
+                    hasilPendapatan.push(Number(newData[key].revenue) - Number(newData[key].expense))
+                }
+
 
                 valuePurchases = totalpurch[0].totalpurch
                 valueSales = totalsales[0].sum
