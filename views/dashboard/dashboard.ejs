@@ -3,52 +3,54 @@
     <div class="container-fluid all-menu">
         <h1>Dashboard</h1>
         <div class="card">
-            <div class="card-header">
-                Data settings
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="startDate" class="form-label">Start Date</label>
-                            <input type="date" class="form-control" id="startDate">
+            <form action="" method="get">
+                <div class="card-header">
+                    Data settings
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="startDate" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="endDate" class="form-label">End Date</label>
-                            <input type="date" class="form-control" id="endDate">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="endDate" class="form-label">End Date</label>
+                                <input type="date" class="form-control" id="endDate" name="endDate">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-footer text-muted">
-                <div class="btn-group dropstart">
-                    <button type="submit" class="btn btn-success dropdown-toggle-split">
-                        <span class="btn-logo"><i class="fa-solid fa-check"></i></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <!-- Dropdown menu links -->
-                    </ul>
-                    <button type="submit" class="btn btn-secondary" style="background-color: rgb(59, 160, 59);">
-                        <span>Query</span>
-                    </button>
-                </div>
-                <a href="/dashboard" style="text-decoration: none;">
+                <div class="card-footer text-muted">
                     <div class="btn-group dropstart">
-                        <button type="button" class="btn btn-warning dropdown-toggle-split"
-                            style="background-color: rgb(117, 117, 0);">
-                            <span class="btn-logo"><i class="fa-solid fa-arrow-left"></i></span>
+                        <button type="submit" class="btn btn-success dropdown-toggle-split">
+                            <span class="btn-logo"><i class="fa-solid fa-check"></i></span>
                         </button>
                         <ul class="dropdown-menu">
                             <!-- Dropdown menu links -->
                         </ul>
-                        <button type="button" class="btn btn-warning">
-                            <span>Reset</span>
+                        <button type="submit" class="btn btn-secondary" style="background-color: rgb(59, 160, 59);">
+                            <span>Query</span>
                         </button>
                     </div>
-                </a>
-            </div>
+                    <a href="/dashboard" style="text-decoration: none;">
+                        <div class="btn-group dropstart">
+                            <button type="button" class="btn btn-warning dropdown-toggle-split"
+                                style="background-color: rgb(117, 117, 0);">
+                                <span class="btn-logo"><i class="fa-solid fa-arrow-left"></i></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!-- Dropdown menu links -->
+                            </ul>
+                            <button type="button" class="btn btn-warning">
+                                <span>Reset</span>
+                            </button>
+                        </div>
+                    </a>
+                </div>
+            </form>
         </div>
         <br>
         <div class="container-fluid">
@@ -89,7 +91,7 @@
                         <div class="card-body">
                             <h6 style="font-size: 15px; color: gold;">TOTAL SALES</h6>
                             <h5>
-                                <%= customers[0].count %>
+                                <%= customers[0].count%>
                             </h5>
                         </div>
                     </div>
@@ -148,13 +150,35 @@
                             <table id="example" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Mounthly</th>
+                                        <th>Monthly</th>
                                         <th>Expense</th>
                                         <th>Revenue</th>
-                                        <th>Earning</th>
+                                        <th>Earnings</th>
                                     </tr>
                                 </thead>
+                                <tbody>
+                                    <% getData.forEach(item=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= item.monthly %>
+                                            </td>
+                                            <td>
+                                                <%= item.expense %>
+                                            </td>
+                                            <td>
+                                                <%= item.revenue %>
+                                            </td>
+                                            <td>
+                                                <%= (item.revenue - item.expense)%>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
                                 <tfoot>
+                                    <th>TOTAL</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
                                 </tfoot>
                             </table>
                         </div>
@@ -163,29 +187,40 @@
             </div>
         </div>
     </div>
-
-    </div>
     <script>
         let countUMUM = null
         let countMember = null
-        let valuePurchases = null
-        let valueSales = null
-        let getBulan = []
-        let hasilPendapatan = []
-
         $(document).ready(function () {
             readData()
-            $('#example').DataTable({
+            var table = $('#example').DataTable({
+                "searching": false,
                 "lengthMenu": [[3, 6, 20], [3, 6, 20]],
-                "processing": true,
-                "serverSide": true,
-                "ajax": "dashboard/datatable",
-                "columns": [
-                    { "data": "barcode" },
-                    { "data": "name" },
-                    { "data": "stock" },
-                    { "data": "purchaseprice" }
-                ]
+                "createdRow": function (row, data, index) {
+                    if (data[2] <= 0 || data[3] <= 0) {
+                        $('td', row).eq(2).css({
+                            'background-color': '#ff5252',
+                            'color': 'white',
+                        })
+                        $('td', row).eq(3).css({
+                            'background-color': '#ff5252',
+                            'color': 'white',
+                            'border-style': 'solid',
+                            'border-color': '#bdbdbd'
+                        })
+                    }
+                },
+                'drawCallback': function () {
+                    var api = this.api();
+                    $(api.column(3).footer()).html(
+                        'Rp.' + api.column(3, { page: 'current' }).data().sum()
+                    );
+                    $(api.column(2).footer()).html(
+                        'Rp.' + api.column(2, { page: 'current' }).data().sum()
+                    );
+                    $(api.column(1).footer()).html(
+                        'Rp.' + api.column(1, { page: 'current' }).data().sum()
+                    );
+                }
             });
         });
         // Area Chart Example
@@ -193,38 +228,13 @@
 
         const readData = () => {
             $.ajax({
-                method: "GET",
-                url: "dashboard/revsource",
+                data: { startDate: $('#startDate').val(), endDate: $('#endDate').val() },
+                url: 'dashboard/revsource'
             }).done(function (res) {
-                const { member, direct, totalpurch, totalsales } = res
+                const { member, direct, hasilPendapatan, getBulan } = res
 
-                for (let i = 0; i < totalpurch.length; i++) {
-                    getBulan.push(totalpurch[i].monthly)
-                }
-
-                let data = totalpurch.concat(totalsales)
-                let newData = {}
-                data.forEach(item => {
-                    if (newData[item.forsort]) {
-                        newData[item.forsort] = { monthly: item.monthly, expense: item.totalpurch ? item.totalpurch : newData[item.forsort].expense, revenue: item.totalsales ? item.totalsales : newData[item.forsort].revenue }
-                    } else {
-                        newData[item.forsort] = { monthly: item.monthly, expense: item.totalpurch ? item.totalpurch : 0, revenue: item.totalsales ? item.totalsales : 0 }
-                    }
-                });
-
-                for (const key in newData) {
-                    hasilPendapatan.push(Number(newData[key].revenue) - Number(newData[key].expense))
-                }
-
-
-                valuePurchases = totalpurch[0].totalpurch
-                valueSales = totalsales[0].sum
-                // let ketunTungan = valueSales - valuePurchases
-
-
-                countMember = member[0].count
-                countUMUM = direct[0].count
-
+                let countMember = member[0].count
+                let countUMUM = direct[0].count
                 var ctx = document.getElementById("myPieChart");
                 var myPieChart = new Chart(ctx, {
                     type: 'doughnut',
@@ -255,6 +265,7 @@
                         cutoutPercentage: 80,
                     },
                 });
+
                 function number_format(number, decimals, dec_point, thousands_sep) {
                     // *     example: number_format(1234.56, 2, ',', ' ');
                     // *     return: '1 234,56'
