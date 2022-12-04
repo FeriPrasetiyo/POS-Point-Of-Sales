@@ -157,13 +157,17 @@ module.exports = function (db) {
       const userid = { user: req.session.user.userid }
       const { email, name } = req.body
 
-      await db.query('UPDATE users SET email=$1, name=$2 WHERE userid=$3', [email, name, userid.user])
+      const { rows: data } = await db.query('UPDATE users SET email=$1, name=$2 WHERE userid=$3', [email, name, userid.user])
+
+      const { rows: emails } = await db.query('SELECT * FROM users WHERE email = $1', [email])
+      const user = emails[0]
+      delete user['password']
 
       req.session.user = user
-      req.session.reload()
-      res.redirect('/user/profile', { user: req.session.user });
+      res.redirect('/dashboard')
     } catch (err) {
       req.flash('err', err)
+      console.log(err)
       return res.redirect('/users/profile')
     }
   })
