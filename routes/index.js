@@ -143,6 +143,82 @@ module.exports = function (db) {
     }
   })
 
+  router.get('/users/profile', isLoggedIn, function (req, res, next) {
+    const userid = { user: req.session.user.userid }
+    db.query('SELECT email, name FROM users WHERE userid = $1', [userid.user], (err, data) => {
+      if (err) return res.send(err)
+      if (data.rows.length == 0) return res.send('data not found')
+      res.render('users/editprofile', { user: req.session.user, current: 'edit', item: data.rows[0] });
+    })
+  });
+
+  router.post('/users/profile', async (req, res) => {
+    try {
+      const userid = { user: req.session.user.userid }
+      const { email, name } = req.body
+
+      await db.query('UPDATE users SET email=$1, name=$2 WHERE userid=$3', [email, name, userid.user])
+
+      req.session.user = user
+      req.session.reload()
+      res.redirect('/user/profile', { user: req.session.user });
+    } catch (err) {
+      req.flash('err', err)
+      return res.redirect('/users/profile')
+    }
+  })
+
+  router.get('/users/profile', isLoggedIn, function (req, res, next) {
+    const userid = { user: req.session.user.userid }
+    db.query('SELECT email, name FROM users WHERE userid = $1', [userid.user], (err, data) => {
+      if (err) return res.send(err)
+      if (data.rows.length == 0) return res.send('data not found')
+      res.render('users/editprofile', { user: req.session.user, current: 'edit', item: data.rows[0] });
+    })
+  });
+
+  router.get('/users/changepassword', async (req, res) => {
+    try {
+      res.render('users/editpassword', {
+        user: req.session.user, current: 'changepassword',
+        success: req.flash('success'),
+        error: req.flash('error')
+      })
+    } catch (err) {
+      res.send(err)
+    }
+  })
+
+  router.post('/users/changepassword', async (req, res) => {
+    try {
+
+      const userid = { user: req.session.user }
+      const { oldPassword, passwordOne, passwordTwo } = req.body
+
+      const { rows: emails } = await db.query('SELECT * FROM users WHERE email = $1', [userid.user.email])
+
+      if (!bcrypt.compareSync(oldPassword, emails[0].password)) {
+        req.flash('error', "passowrd old anda salah")
+        return res.redirect('/users/changepassword')
+      }
+
+      if (passwordOne != passwordTwo) {
+        req.flash('error', "Retype Password tidak sama")
+        return res.redirect("/users/changepassword")
+      }
+
+      if (passwordOne) {
+        const hash = bcrypt.hashSync(passwordOne, saltRounds);
+        const { rows: passowrd } = await db.query('UPDATE users SET password=$1 WHERE email=$2', [hash, userid.user.email])
+        req.flash('success', 'password kamu berhasil di ubah')
+      }
+
+      res.redirect('/users/changepassword')
+    } catch (err) {
+      req.flash('err', err)
+      return res.redirect('/users/changepassword')
+    }
+  })
 
   return router;
 }

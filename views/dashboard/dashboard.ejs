@@ -12,13 +12,15 @@
                         <div class="col">
                             <div class="mb-3">
                                 <label for="startDate" class="form-label">Start Date</label>
-                                <input type="date" class="form-control" id="startDate" name="startDate">
+                                <input type="date" class="form-control" id="startDate" name="startDate"
+                                    value="<%= query.startDate %>">
                             </div>
                         </div>
                         <div class="col">
                             <div class="mb-3">
                                 <label for="endDate" class="form-label">End Date</label>
-                                <input type="date" class="form-control" id="endDate" name="endDate">
+                                <input type="date" class="form-control" id="endDate" name="endDate"
+                                    value="<%= query.endDate%>">
                             </div>
                         </div>
                     </div>
@@ -229,7 +231,7 @@
         const readData = () => {
             $.ajax({
                 data: { startDate: $('#startDate').val(), endDate: $('#endDate').val() },
-                url: 'dashboard/revsource'
+                url: '/dashboard/revsource'
             }).done(function (res) {
                 const { member, direct, hasilPendapatan, getBulan } = res
 
