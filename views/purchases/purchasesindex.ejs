@@ -52,6 +52,8 @@
     </div>
     <script>
         $(document).ready(function () {
+            let getidUser = '<%= user.userid %>'
+            console.log(getidUser)
             $('#example').DataTable({
                 "lengthMenu": [[3, 6, 20], [3, 6, 20]],
                 "processing": true,
@@ -71,7 +73,7 @@
                         "data": "invoice",
                         render: function (data, index) {
                             return `
-                                        <a href="/purchases/show/${data}" style="text-decoration: none;">
+                                        <a href="/purchases/show/${data}" style="text-decoration: none;" disable>
                                                     <button type="button" class="btn btn-success"
                                                         style="border-radius: 50%;"><i
                                                             class="fa-solid fa-circle-exclamation"></i></button>
@@ -107,10 +109,24 @@
                                                         </div>
                                                     </div>
                                                 </a>
+                                            </div>
                             `
                         }
                     }
-                ]
+                ],
+                "rowCallback": function (row, data, index) {
+                    console.log(data.operator)
+                    if (data.operator != getidUser) {
+                        $('td', row).eq(4).css({
+                            'background-color': '#ff5252',
+                            'pointer-events': 'none',
+                            'cursor': 'default',
+                            'color': 'white',
+                            'border-style': 'solid',
+                            'border-color': '#bdbdbd'
+                        })
+                    }
+                },
             });
         });
     </script>

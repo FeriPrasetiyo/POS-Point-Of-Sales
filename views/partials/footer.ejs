@@ -1,3 +1,12 @@
 </body>
 
 </html>
+<script>
+    let editrole = '<%= user.role %>'
+    let labelView = document.querySelectorAll('.akses')
+    $(document).ready(function () {
+        if (editrole != 'admin') {
+            $('.akses').css('display', 'none');
+        }
+    })
+</script>

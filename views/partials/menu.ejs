@@ -15,14 +15,14 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <hr>
-                    <li class="nav-item">
+                    <li class="nav-item akses">
                         <a class="nav-link <%= current == 'dashboard' ? 'active' : '' %>" href="/dashboard">
                             <i class="fa-solid fa-gauge-high"></i>
                             <span class="link_name">Dashboard</span>
                         </a>
+                        <hr>
                     </li>
-                    <hr>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown akses">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             <i class="fa-solid fa-wrench"></i>
@@ -47,7 +47,7 @@
                             <span class="link_name">Costommers</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item akses">
                         <a class="nav-link <%= current == 'users' ? 'active' : '' %>" href="/users"><i
                                 class="fa-solid fa-user"></i>
                             <span class="link_name">Users</span>
