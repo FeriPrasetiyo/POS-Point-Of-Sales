@@ -5,5 +5,14 @@ module.exports = {
         } else {
             res.redirect('/')
         }
+    },
+
+    isLoggedIn_admin: (req, res, next) => {
+        if (req.session.user.role == 'admin') {
+            next()
+        } else {
+            res.redirect('/sales')
+        }
     }
 }
+

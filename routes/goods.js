@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-const { isLoggedIn } = require('../helpers/util')
+const { isLoggedIn_admin } = require('../helpers/util')
 const path = require('path')
 var fs = require('fs');
 
 
 /* GET home page. */
 module.exports = function (db) {
-    router.get('/', isLoggedIn, function (req, res, next) {
+    router.get('/', isLoggedIn_admin, function (req, res, next) {
         db.query('SELECT * FROM goods', (err, data) => {
             if (err) return res.send(err)
             res.render('goods/goodindex', { user: req.session.user, current: 'goods', goods: data.rows });
@@ -41,7 +41,7 @@ module.exports = function (db) {
         res.json(response)
     })
 
-    router.get('/add', isLoggedIn, function (req, res, next) {
+    router.get('/add', isLoggedIn_admin, function (req, res, next) {
         db.query('SELECT * FROM units', (err, data) => {
             if (err) return res.send(err)
             res.render('goods/goodsadd', { user: req.session.user, current: 'goods', units: data.rows });

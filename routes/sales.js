@@ -15,7 +15,7 @@ module.exports = function (db) {
     })
   });
 
-  router.get('/datatable', async (req, res) => {
+  router.get('/datatable', isLoggedIn, async (req, res) => {
     let params = []
 
     if (req.query.search.value) {
@@ -48,7 +48,7 @@ module.exports = function (db) {
     }
   })
 
-  router.get('/show/:invoice', async (req, res) => {
+  router.get('/show/:invoice', isLoggedIn, async (req, res) => {
     try {
       const sales = await db.query('SELECT * FROM sales WHERE invoice = $1', [req.params.invoice])
       const { rows: data } = await db.query('SELECT barcode, name FROM goods order by barcode')
@@ -79,7 +79,7 @@ module.exports = function (db) {
     }
   })
 
-  router.get('/goods/:barcode', async (req, res) => {
+  router.get('/goods/:barcode', isLoggedIn, async (req, res) => {
     try {
       const { barcode } = req.params
       const { rows } = await db.query('SELECT * FROM goods WHERE barcode = $1', [barcode])

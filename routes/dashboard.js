@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
-const { isLoggedIn } = require('../helpers/util')
+const { isLoggedIn_admin } = require('../helpers/util')
 
 
 /* GET home page. */
 module.exports = function (db) {
-  router.get('/', isLoggedIn, async function (req, res, next) {
+  router.get('/', isLoggedIn_admin, async function (req, res, next) {
     try {
       const { startDate, endDate } = req.query
       const { rows: purhcases } = await db.query('SELECT sum(totalsum) FROM purchases')
@@ -104,7 +104,7 @@ module.exports = function (db) {
 
 
 
-  router.get('/revsource', isLoggedIn, async (req, res, next) => {
+  router.get('/revsource', isLoggedIn_admin, async (req, res, next) => {
     try {
       const { startDate, endDate } = req.query
       console.log(startDate, endDate)
