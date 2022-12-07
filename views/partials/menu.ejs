@@ -83,13 +83,28 @@
                     class="fa-solid fa-magnifying-glass"></i></button>
         </form>
         <div class="dropdown">
-            <button class="btn btn-linght dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
+            <button class="btn btn-linght" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-bell"></i>
+            </button>
+            <div id="badge">
+                <span class="badge badge-danger badge-counter" id="semuastok"></span>
+            </div>
+            <ul class="dropdown-menu" style="width: 400px; margin-left: -300px; background-color: rgb(71, 71, 255);">
+                <div class="row">
+                    <h6 style="color: white; padding-left: 3rem;">Alerts center</h6>
+                </div>
+                <div class="row" id="stokHabis" style="background-color: white;">
+
+                </div>
+            </ul>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-linght" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <%= user.name %>
                     <i class="fa-solid fa-user"></i>
                     <!-- <img src="../public/images/default-users2.png" width="9%" alt=""> -->
             </button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" style="margin-left: -100px;">
                 <li><a class="dropdown-item" href="/users/profile"><i class="fa-solid fa-user"></i> Profile</a></li>
                 <li><a class="dropdown-item" href="/users/changepassword"><i class="fa-sharp fa-solid fa-gears"></i>
                         Change Password</a>

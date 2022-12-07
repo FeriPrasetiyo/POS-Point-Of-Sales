@@ -221,6 +221,15 @@ module.exports = function (db) {
     }
   })
 
+  router.get('/stock', async (req, res) => {
+    try {
+      const { rows: stock } = await db.query('SELECT barcode,name,stock FROM goods WHERE stock <= 100;')
+      res.json(stock)
+    } catch (err) {
+      res.send(err)
+    }
+  })
+
   return router;
 }
 

@@ -8,5 +8,29 @@
         if (editrole != 'admin') {
             $('.akses').css('display', 'none');
         }
+        $.ajax({
+            method: "GET",
+            url: "/stock"
+        }).done(function (data) {
+            console.log(data.length)
+            let html = ""
+            data.forEach(item => {
+                html += `<div class="col-2" style="margin: 1rem 2rem 0rem 0rem;">
+                        <button type="button" class="btn btn-warning rounded-circle"><i
+                                class="fa-solid fa-triangle-exclamation"></i></button>
+                    </div>
+                    <div class="col">
+                        <span style="font-size: 15px;">Barcode:${item.barcode}</span>
+                        <h6>Stock Alert:${item.name}</h6>
+                        <h6>only have stok:${item.stock}</h6>
+                    </div>`
+            })
+            $('#stokHabis').html(html)
+            let htmlOne = ""
+            htmlOne += data.length + "+"
+            $('#semuastok').html(htmlOne)
+        }).fail(function (err) {
+            console.log(err)
+        })
     })
 </script>
